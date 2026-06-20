@@ -24,28 +24,28 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS))
+                // We disable sessions because we are stateless — JWT handles identity
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/**",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**"
-                        ).permitAll()
-                        .requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
+
+                        // Anyone can register or login — no token needed
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // ONLY users with ROLE_ADMIN can access admin endpoints
+                        // Spring Security automatically prefixes "ADMIN" with "ROLE_"
+                        // so hasRole("ADMIN") checks for "ROLE_ADMIN" in the JWT
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                        // Every other endpoint needs a valid JWT, any role
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(
-                        jwtAuthFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+                // Add our JWT filter BEFORE Spring's username/password filter
+                // because we want JWT to set authentication BEFORE Spring checks it
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
