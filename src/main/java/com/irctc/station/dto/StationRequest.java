@@ -1,5 +1,3 @@
-// package com.yourproject.station;
-
 package com.irctc.station.dto;
 
 import jakarta.validation.constraints.NotBlank;
@@ -7,13 +5,10 @@ import jakarta.validation.constraints.Size;
 
 public class StationRequest {
 
-    // @NotBlank means: must not be null AND must not be empty/whitespace
-    // This catches both null and "" and "   " — all three are rejected
     @NotBlank(message = "Station name is required")
     @Size(max = 100, message = "Station name must be under 100 characters")
     private String name;
 
-    // Station code is like "NDLS", "BCT", "MAS" — always uppercase, short
     @NotBlank(message = "Station code is required")
     @Size(min = 2, max = 10, message = "Station code must be 2-10 characters")
     private String code;
@@ -24,8 +19,6 @@ public class StationRequest {
     @NotBlank(message = "State is required")
     private String state;
 
-    // Getters and setters (or use Lombok @Data if you have it)
-    // I'll write explicit ones so you understand the structure
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 

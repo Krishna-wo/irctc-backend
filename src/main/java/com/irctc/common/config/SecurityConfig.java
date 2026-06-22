@@ -31,20 +31,12 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-
-                        // Anyone can register or login — no token needed
                         .requestMatchers("/api/auth/**").permitAll()
-
-                        // ONLY users with ROLE_ADMIN can access admin endpoints
-                        // Spring Security automatically prefixes "ADMIN" with "ROLE_"
-                        // so hasRole("ADMIN") checks for "ROLE_ADMIN" in the JWT
+                        .requestMatchers("/api/search/**").permitAll()
+                        .requestMatchers("/api/bookings/**").authenticated() // ← ADD THIS
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
-                        // Every other endpoint needs a valid JWT, any role
                         .anyRequest().authenticated()
                 )
-                // Add our JWT filter BEFORE Spring's username/password filter
-                // because we want JWT to set authentication BEFORE Spring checks it
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -1,5 +1,6 @@
 package com.irctc.auth.dto;
 
+import com.irctc.user.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -22,4 +23,6 @@ public class RegisterRequest {
 
     @Size(min = 10, max = 15, message = "Invalid phone number")
     private String phone;
+
+    private Role role;
 }

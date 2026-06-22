@@ -1,31 +1,39 @@
 package com.irctc.train.dto;
 
-import com.irctc.common.enums.TrainType;
+import com.irctc.train.TrainType;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class TrainRequest {
 
+    // String not Integer — "00101" would lose leading zeros as int
     @NotBlank(message = "Train number is required")
-    private String trainNumber; // "12301" — always a string, never an int
+    private String trainNumber;
 
-    // Why String and not Integer for train number?
-    // Because "00101" would lose its leading zeros as Integer
-    // Train numbers are identifiers, not numbers you do math on
-
+    // Matches entity field: name (not trainName)
     @NotBlank(message = "Train name is required")
-    private String trainName; // "Howrah Rajdhani Express"
+    private String name;
 
+    // TrainType lives in com.irctc.train — NOT in common.enums (that package doesn't exist)
+    // Matches entity field: type (not trainType)
     @NotNull(message = "Train type is required")
-    private TrainType trainType; // RAJDHANI, SHATABDI, EXPRESS, PASSENGER
+    private TrainType type;
 
-    // Getters and setters
+    // Entity has totalDistanceKm as NOT NULL — must be in request
+    @NotNull(message = "Total distance in km is required")
+    @Min(value = 1, message = "Distance must be at least 1 km")
+    private Integer totalDistanceKm;
+
     public String getTrainNumber() { return trainNumber; }
     public void setTrainNumber(String trainNumber) { this.trainNumber = trainNumber; }
 
-    public String getTrainName() { return trainName; }
-    public void setTrainName(String trainName) { this.trainName = trainName; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public TrainType getTrainType() { return trainType; }
-    public void setTrainType(TrainType trainType) { this.trainType = trainType; }
+    public TrainType getType() { return type; }
+    public void setType(TrainType type) { this.type = type; }
+
+    public Integer getTotalDistanceKm() { return totalDistanceKm; }
+    public void setTotalDistanceKm(Integer totalDistanceKm) { this.totalDistanceKm = totalDistanceKm; }
 }
