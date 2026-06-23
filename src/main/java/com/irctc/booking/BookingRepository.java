@@ -1,7 +1,10 @@
 package com.irctc.booking;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,4 +16,15 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     // Get all bookings for a user — for "My Bookings" page
     List<Booking> findByUserIdOrderByCreatedAtDesc(Long userId);
+    // Add these to your existing BookingRepository
+
+    // SUM all totalFare across all CONFIRMED bookings
+// @Query uses JPQL — Booking is entity name, totalFare is field name
+    @Query("SELECT COALESCE(SUM(b.totalFare), 0) FROM Booking b WHERE b.status = 'CONFIRMED'")
+    BigDecimal calculateTotalRevenue();
+
+    // Find which train has the most bookings
+// GROUP BY train, ORDER BY count descending, take first result
+    @Query("SELECT b.train.trainNumber FROM Booking b WHERE b.status = 'CONFIRMED' GROUP BY b.train ORDER BY COUNT(b) DESC LIMIT 1")
+    String findMostBookedTrainNumber();
 }

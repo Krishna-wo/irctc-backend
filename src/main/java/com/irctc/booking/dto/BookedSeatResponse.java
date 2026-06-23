@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 public class BookedSeatResponse {
 
+    private Long bookedSeatId;
     private Long seatId;
     private String coachNumber;
     private String seatNumber;
@@ -15,9 +16,8 @@ public class BookedSeatResponse {
     private String passengerGender;
     private BigDecimal fare;
 
-    // Called inside @Transactional — LAZY chains safe:
-    // bookedSeat → seat → coach
     public BookedSeatResponse(BookedSeat bookedSeat) {
+        this.bookedSeatId = bookedSeat.getId();
         this.seatId = bookedSeat.getSeat().getId();
         this.coachNumber = bookedSeat.getSeat().getCoach().getCoachNumber();
         this.seatNumber = bookedSeat.getSeat().getSeatNumber();
@@ -28,6 +28,7 @@ public class BookedSeatResponse {
         this.fare = bookedSeat.getFare();
     }
 
+    public Long getBookedSeatId() { return bookedSeatId; }
     public Long getSeatId() { return seatId; }
     public String getCoachNumber() { return coachNumber; }
     public String getSeatNumber() { return seatNumber; }

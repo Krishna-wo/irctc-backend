@@ -39,4 +39,10 @@ public class BookedSeat {
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal fare;
+
+    @Column(name = "status", nullable = false, length = 20)
+    private String status = "CONFIRMED";
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

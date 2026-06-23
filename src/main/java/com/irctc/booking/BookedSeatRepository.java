@@ -19,4 +19,9 @@ public interface BookedSeatRepository extends JpaRepository<BookedSeat, Long> {
 
     // Get all booked seats for a booking — for building response
     List<BookedSeat> findByBookingId(Long bookingId);
+    // Add this to your existing BookedSeatRepository
+
+    // Check if ANY active (non-cancelled) seats remain in a booking
+// Used to decide if the whole booking should become CANCELLED
+    boolean existsByBookingIdAndStatus(Long bookingId, String status);
 }
