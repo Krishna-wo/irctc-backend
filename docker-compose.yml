@@ -12,6 +12,27 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # restart: unless-stopped means Docker will restart this container
+    # automatically if it crashes — important for production
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    # alpine = lightweight Linux — Redis image is only 30MB instead of 100MB
+    container_name: irctc-redis
+    ports:
+      - "6379:6379"
+    # 6379 is Redis default port — same as 5432 is Postgres default
+    command: redis-server --appendonly yes
+    # --appendonly yes = Redis writes every operation to disk
+    # Without this, Redis loses ALL data on restart
+    # With this, Redis can recover data after restart
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
 
 volumes:
   postgres_data:
+  redis_data:
+  # Two separate volumes — one for each service
+  # Docker manages these as named volumes on your machine

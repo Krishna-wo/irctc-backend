@@ -98,6 +98,25 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.3.0</version>
 		</dependency>
+		<!-- Spring Data Redis — lets Spring Boot talk to Redis -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<!-- Lettuce — the Redis client Spring uses under the hood -->
+		<!-- Lettuce is async and thread-safe — better than Jedis for high traffic -->
+		<dependency>
+			<groupId>io.lettuce</groupId>
+			<artifactId>lettuce-core</artifactId>
+		</dependency>
+
+		<!-- Jackson — needed to serialize Java objects to JSON for Redis storage -->
+		<!-- You already have this — just confirming it's needed for Redis too -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

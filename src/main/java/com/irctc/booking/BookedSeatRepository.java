@@ -8,11 +8,8 @@ import java.util.List;
 @Repository
 public interface BookedSeatRepository extends JpaRepository<BookedSeat, Long> {
 
-    // THE most critical query in the system:
-    // Is this specific seat already booked on this specific date?
-    // This prevents double booking
-    boolean existsBySeatIdAndBooking_JourneyDate(
-            Long seatId, LocalDate journeyDate);
+    boolean existsBySeatIdAndBooking_JourneyDateAndStatus(
+            Long seatId, LocalDate journeyDate, String status);
     // Spring reads: existsBy + SeatId + And + Booking_JourneyDate
     // Booking_JourneyDate means: go into the Booking relation, get journeyDate field
     // This is a nested field derived query — Spring handles the JOIN automatically
@@ -24,4 +21,5 @@ public interface BookedSeatRepository extends JpaRepository<BookedSeat, Long> {
     // Check if ANY active (non-cancelled) seats remain in a booking
 // Used to decide if the whole booking should become CANCELLED
     boolean existsByBookingIdAndStatus(Long bookingId, String status);
+
 }
